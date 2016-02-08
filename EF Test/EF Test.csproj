@@ -49,13 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="Card.cs" />
+    <Compile Include="Domain\Account.cs" />
+    <Compile Include="Domain\Card.cs" />
     <Compile Include="CardAccountDBContext.cs" />
-    <Compile Include="CardDesign.cs" />
-    <Compile Include="Cardholder.cs" />
+    <Compile Include="Domain\CardDesign.cs" />
+    <Compile Include="Domain\Cardholder.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="DbDebugInterceptor.cs" />
+    <Compile Include="Interceptor\DbDebugInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

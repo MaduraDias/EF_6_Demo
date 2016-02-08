@@ -16,7 +16,6 @@ namespace EFTest_Unit
         [TestInitialize]
         public void StartUp()
         {
-            Trace.Listeners.Add(new TextWriterTraceListener("D:\\Logging\\DBCommand.txt"));
             using (var context = new CardAccountDBContext())
             {
                 context.Account.Add(
@@ -153,7 +152,53 @@ namespace EFTest_Unit
             }
         }
 
+        #region  Demo
+
+        //Virtual Properties
+        //Lazy Loading
+        //Eager Loading
+        //Explicit Loading
+        //Proxy Enabled
+
         [TestMethod]
+        public void ReadTest()
+        {
+            using (var context = new CardAccountDBContext())
+            {
+                context.Configuration.LazyLoadingEnabled = false;
+                context.Configuration.ProxyCreationEnabled = false;
+
+                var account = context.Account.Where(x => x.AccountId == 1).FirstOrDefault();
+
+                //var account = context.Account.Where(x => x.AccountId == 1)
+                //    .Include(x => x.Cards)
+                //    .Include(x => x.Cards.Select(y => y.CardDesign))
+                //    .Include(x => x.Cards.Select(z => z.Cardholder))
+                //    .FirstOrDefault();
+
+
+                context.Entry<Account>(account)
+                 .Collection(X => X.Cards)
+                 .Query()
+                 .Include(X=>X.CardDesign)
+                 .Include(X=>X.Cardholder)
+                 .Load();
+                 
+
+                foreach (var card in account.Cards)
+                {
+                    var cardDesign = card.CardDesign;
+                    var cardholder = card.Cardholder;
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Thread Test
+
+        // [TestMethod]
         public void TestLazyLoading()
         {
             //Show virtual
@@ -167,8 +212,8 @@ namespace EFTest_Unit
             var thread3 = new Thread(() => Read(3));
 
             thread1.Start();
-         //   thread2.Start();
-          //  thread3.Start();
+            //   thread2.Start();
+            //  thread3.Start();
 
             // Read(1);
         }
@@ -181,7 +226,8 @@ namespace EFTest_Unit
                 context.Configuration.LazyLoadingEnabled = true;
                 //   context.Configuration.ProxyCreationEnabled = false;
 
-                try {
+                try
+                {
 
                     var account = context.Account.Where(x => x.AccountId == accId).SingleOrDefault();
 
@@ -224,12 +270,11 @@ namespace EFTest_Unit
 
 
 
-
-
-
             }
         }
 
+        #endregion
+
     }
-      
-    }
+
+}

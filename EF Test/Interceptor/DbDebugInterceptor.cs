@@ -16,34 +16,32 @@ namespace EF_Test
 
         public override void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
         {
-            //   base.NonQueryExecuted(command, interceptionContext);
-
             
-            Trace.WriteLine(command.CommandText + " thread id:" + Thread.CurrentThread.ManagedThreadId);
-            Trace.Flush();
+            Debug.WriteLine(command.CommandText + " thread id:" + Thread.CurrentThread.ManagedThreadId);
+            Debug.Flush();
         }
 
         public override void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
         {
-            //base.NonQueryExecuting(command, interceptionContext);
+           
         }
 
         public override void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
         {
 
-            Trace.WriteLine( "-------------------Start thread id:" + Thread.CurrentThread.ManagedThreadId + "----------------------------");
-            Trace.WriteLine(command.CommandText );
+            Debug.WriteLine( "-------------------Start Query----------------------------");
+            Debug.WriteLine(command.CommandText );
 
-            if(command.Parameters !=null && command.Parameters.Count >0)
+            if(command.Parameters !=null)
             {
-                Trace.WriteLine(command.Parameters[0].Value);
+                foreach(var p in command.Parameters)
+                {
+                    Debug.WriteLine(p.ToString());
+                }
             }
           
-            Trace.WriteLine("-------------------End thread id:" + Thread.CurrentThread.ManagedThreadId + "----------------------------");
-
-
-            Trace.Flush();
-            //base.ReaderExecuted(command, interceptionContext);
+            Debug.WriteLine("-------------------End Query----------------------------");
+           
         }
 
         public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
@@ -54,7 +52,7 @@ namespace EF_Test
 
         public override void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
         {
-            Trace.WriteLine(command.CommandText);
+            Debug.WriteLine(command.CommandText);
             //base.ScalarExecuted(command, interceptionContext);
         }
 
